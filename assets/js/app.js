@@ -6,9 +6,3 @@ requirejs.config({
         'e': '../js/lib/e',
     },
 });
-
-require(['react-dom', 'lib/Scaffold', 'e'], function (ReactDOM, Scaffold, e) {
-    ReactDOM.render(
-        e(Scaffold), document.querySelector('#app')
-    )
-});

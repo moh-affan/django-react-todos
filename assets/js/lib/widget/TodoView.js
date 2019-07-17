@@ -1,7 +1,7 @@
 define(function (require) {
     'use strict';
-    var React = require('../../react');
-    var e = require('../e');
+    const React = require('../../react');
+    const e = require('../e');
 
     return class TodoView extends React.Component {
         constructor(props) {

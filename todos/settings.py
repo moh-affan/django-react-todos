@@ -24,7 +24,7 @@ SECRET_KEY = 'vh@qm*u^^o#mt@hke%662*_32lz)%crf*ifmy0+8p(f%9=39n$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['myworks.me', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -35,12 +35,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo.apps.TodoConfig'
+    'todo.apps.TodoConfig',
+    # add django cors headers
+    'corsheaders',
+    # 'todo.templatetags.basic_auth_generator'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # Add Django CORS middleware here
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -115,3 +120,33 @@ USE_TZ = True
 STATIC_URL = '/public/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "assets"),)
+
+# BASIC AUTH SETTING
+BASICAUTH_USERS = {'affan': 'affan'}
+
+# CORS HEADERS SETTING
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://myworks.me:8000',
+]
+CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]

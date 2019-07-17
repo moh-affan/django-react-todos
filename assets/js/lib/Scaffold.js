@@ -1,9 +1,9 @@
 define(function (require) {
     'use strict';
-    var React = require('../react');
-    var e = require('./e');
-    var TodoView = require('./widget/TodoView');
-    var Todo = require('./models/Todo');
+    const React = require('../react');
+    const e = require('./e');
+    const TodoView = require('./widget/TodoView');
+    const Todo = require('./models/Todo');
 
     return class Scaffold extends React.Component {
 
@@ -12,23 +12,43 @@ define(function (require) {
         constructor(props) {
             super(props);
             this.state = {items: this.items, task: ''};
-            this.onTodoCheckChanged.bind(this);
+            this.onTodoCheckChanged = this.onTodoCheckChanged.bind(this);
         }
 
         onBtuttonClick = () => {
+            let that = this;
             if (this.state.task !== '') {
-                this.items.push(new Todo(this.state.task, false));
-                this.setState({});
+                let todo = new Todo(this.state.task, false);
+                axios.post('/', todo).then(function (response) {
+                    console.log(response.data);
+                    if (response.data.success)
+                        that.items.push(todo);
+                }).catch(function (error) {
+                    console.log(error.data);
+                }).finally(function () {
+                    that.setState({});
+                });
             } else {
                 alert('Task could not be empty');
             }
         };
 
         componentDidMount() {
-            this.items.push(new Todo('bangun tidur', false));
-            this.items.push(new Todo('mandi', false));
-            this.items.push(new Todo('pergi ke kantor', false));
-            this.setState({});
+            this.loadData()
+        }
+
+        loadData() {
+            let that = this;
+            axios.get('/').then(function (response) {
+                console.log(response.data);
+                response.data.result.forEach(function (todo, index) {
+                    that.items.push(new Todo(todo.task, todo.checked));
+                });
+            }).catch(function (error) {
+                console.log(error);
+            }).finally(function () {
+                that.setState({});
+            });
         }
 
         onTodoCheckChanged = (todo, index) => {

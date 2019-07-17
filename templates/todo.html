@@ -11,8 +11,18 @@
 
 <script type="application/javascript" src="{% static "js/jquery-3.4.1.min.js" %}"></script>
 <script type="application/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+<script type="application/javascript" src="{% static "js/axios.min.js" %}"></script>
 <script data-main="{% static "js/app.js" %}" type="application/javascript"
         src="{% static "js/require.js" %}"></script>
-
+{% load basic_auth_generator %}
+<script>
+    axios.defaults.baseURL = 'http://localhost:8000/api';
+    axios.defaults.headers.common['Authorization'] = '{% generate_basic 'affan' 'affan' %}';
+    require(['react-dom', 'lib/Scaffold', 'lib/e'], function (ReactDOM, Scaffold, e) {
+        ReactDOM.render(
+            e(Scaffold), document.querySelector('#app')
+        )
+    });
+</script>
 </body>
 </html>
