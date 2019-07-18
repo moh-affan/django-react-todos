@@ -18,9 +18,9 @@
 <script>
     axios.defaults.baseURL = 'http://localhost:8000/api';
     axios.defaults.headers.common['Authorization'] = '{% generate_basic 'affan' 'affan' %}';
-    require(['react-dom', 'lib/Scaffold', 'lib/e'], function (ReactDOM, Scaffold, e) {
+    require(['react-dom', 'lib/Scaffold', 'lib/pages/TodosPage', 'lib/e'], function (ReactDOM, Scaffold, TodosPage, e) {
         ReactDOM.render(
-            e(Scaffold), document.querySelector('#app')
+            e(Scaffold, {}, e(TodosPage)), document.querySelector('#app')
         )
     });
 </script>

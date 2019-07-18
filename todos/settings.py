@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'todo.apps.TodoConfig',
     # add django cors headers
     'corsheaders',
-    # 'todo.templatetags.basic_auth_generator'
 ]
 
 MIDDLEWARE = [
@@ -149,4 +148,8 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'X-CSRFToken'
 ]
+
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False

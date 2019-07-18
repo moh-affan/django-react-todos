@@ -6,22 +6,26 @@ define(function (require) {
     return class TodoView extends React.Component {
         constructor(props) {
             super(props);
-            // this.state = {checked: false};
         }
 
         check() {
             if (this.props.todo.checked)
-                return e('span', {className: "fa fa-check-circle-o text-success float-right"});
-            else return e('span', {className: "fa fa-circle-o text-info float-right"});
+                return e('span', {
+                    className: "fa fa-check-circle-o text-success", onClick: () => {
+                        this.props.onCheckChanged(this.props.todo, this.props.index);
+                    },
+                });
+            else return e('span', {
+                className: "fa fa-circle-o text-info", onClick: () => {
+                    this.props.onCheckChanged(this.props.todo, this.props.index);
+                },
+            });
         }
 
         render() {
             return e(
                 'button',
                 {
-                    onClick: () => {
-                        this.props.onCheckChanged(this.props.todo, this.props.index);
-                    },
                     className: 'btn btn-dark',
                     style: {
                         width: 250,
@@ -29,7 +33,13 @@ define(function (require) {
                     }
                 },
                 e('span', {className: "float-left"}, this.props.todo.task),
-                this.check()
+                e('span', {className: "float-right"}, this.check(), e('span', {
+                    className: 'fa fa-trash text-danger',
+                    onClick: () => {
+                        this.props.onDelete(this.props.todo, this.props.index)
+                    },
+                    style: {marginLeft: 10}
+                }))
             );
         }
     };

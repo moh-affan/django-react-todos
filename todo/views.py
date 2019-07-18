@@ -23,18 +23,30 @@ class ApiTodo(View):
     @method_decorator(basic_auth_required, name='get')
     def get(self, request, *args, **kwargs):
         todos = Todo.objects.all()
-        # return JsonResponse({'result': todos[::1]})
         data = []
         for todo in todos:
-            data.append({'task': todo.task, 'checked': todo.checked})
+            data.append({'id': todo.id, 'task': todo.task, 'checked': todo.checked})
         return JsonResponse({'result': data}, safe=False)
 
     @method_decorator(basic_auth_required, name='post')
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body.decode())
-        try:
-            todo = Todo(task=data['task'], checked=data['checked'])
+        _todo = data['todo']
+        action = data['action']
+        if action == 'create':
+            todo = Todo(task=_todo['task'], checked=_todo['checked'])
             todo.save()
+            return JsonResponse(
+                {'success': True, 'result': {'id': todo.id, 'task': todo.task, 'checked': todo.checked}})
+        elif action == 'check_changed':
+            todo = Todo.objects.get(id=_todo['id'])
+            todo.checked = _todo['checked']
+            todo.save()
+            return JsonResponse(
+                {'success': True, 'result': {'id': todo.id, 'task': todo.task, 'checked': todo.checked}})
+        elif action == 'delete':
+            todo = Todo.objects.get(id=_todo['id'])
+            todo.delete()
             return JsonResponse({'success': True})
-        except:
-            return JsonResponse({'error': True})
+        else:
+            return JsonResponse({'success': False, 'message': 'Action is invalid'})
